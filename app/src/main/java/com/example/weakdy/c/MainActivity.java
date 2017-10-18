@@ -39,12 +39,12 @@ public class MainActivity extends AppCompatActivity {
         socket = new Socket();
         //Set IP Address
         TextView IP_content = (TextView) findViewById(R.id.IP_content);
-        IP_content.setText("Your IP Address is:"+getIpAddress());
+        IP_content.setText("Your IP Address is:" + getIpAddress());
         TextView wifi_info = (TextView) findViewById(R.id.wifi_info);
         if(get_wifi_info().equals("<unknown ssid>")){
             wifi_info.setText("No WIFI Connection");
         }
-        else wifi_info.setText("Wifi:"+get_wifi_info());
+        else wifi_info.setText("Wifi:" + get_wifi_info());
         Button login = (Button) findViewById(R.id.login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
