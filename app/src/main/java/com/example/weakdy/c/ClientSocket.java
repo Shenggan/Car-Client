@@ -18,12 +18,12 @@ import java.util.LinkedList;
  * Created by zqm on 17-10-22.
  */
 
-public class ServerSocket extends Thread {
+public class ClientSocket extends Thread {
     private java.net.ServerSocket mServer;
     public DataListener mDataListener;
     public LinkedList<Integer> msgs;
     Bitmap cu1r=null;
-    public ServerSocket() {
+    public ClientSocket() {
         msgs=new LinkedList<Integer>();
     }
     public static int bytesToInt2(byte[] src, int offset) {
@@ -52,12 +52,11 @@ public class ServerSocket extends Thread {
                     byteArray.reset();
                 else
                     byteArray = new ByteArrayOutputStream();
-                System.out.println("ydf:wt 1");
+                System.out.println("______________________________________________________________________ydf:wt 1");
                 socket = new java.net.Socket();
                 Thread.sleep(1000);
 
-                String ip = IP_connect.IP_addr;
-                System.out.println(ip);
+                String ip = MainActivity.IP_addr;
                 socket.connect(new InetSocketAddress(ip, 8888), 10000); // hard-code server address
 
                 inputStream = new BufferedInputStream(socket.getInputStream());
@@ -67,7 +66,7 @@ public class ServerSocket extends Thread {
                 int len = 0;
                 String msg = null;
                 while (!Thread.currentThread().isInterrupted()&&(len = inputStream.read(buff)) != -1) {
-                    System.out.println("ydf:wt 3");
+                    System.out.println("______________________________________________________________________ydf:wt 3");
                     msg = new String(buff, 0, len);
                     JsonParser parser = new JsonParser();
                     boolean isJSON = true;

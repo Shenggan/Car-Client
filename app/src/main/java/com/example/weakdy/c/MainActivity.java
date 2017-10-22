@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public static Socket socket = null;
     public static ByteArrayOutputStream byteArray = null;
     public static boolean connected = false;
+    public static String IP_addr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this , IP_connect.class));
             }
         });
+
     }
     public void refresh(TextView IP_address,TextView wifi){
         IP_address.setText(getIpAddress());

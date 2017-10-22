@@ -47,7 +47,7 @@ public class IP_connect extends AppCompatActivity implements LoaderCallbacks<Cur
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-    public static String IP_addr;
+
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
@@ -330,7 +330,7 @@ public class IP_connect extends AppCompatActivity implements LoaderCallbacks<Cur
             // TODO: attempt authentication against a network service.
 
             try {
-                IP_addr=ip;
+                MainActivity.IP_addr=ip;
                 MainActivity.socket.connect(new InetSocketAddress(ip, 8888), 10000); // hard-code server address
                 try {
                     MainActivity.inputStream = new BufferedInputStream(MainActivity.socket.getInputStream());
@@ -343,14 +343,16 @@ public class IP_connect extends AppCompatActivity implements LoaderCallbacks<Cur
                 String key = "4312";
                 MainActivity.outputStream.write(key.getBytes());
                 MainActivity.outputStream.flush();
-                Thread.sleep(2000);
-                byte[] buff = new byte[256];
-                if (MainActivity.inputStream.read(buff) != -1){
-                    if (!key.equals(buff)){
-                        //return false;
-                    }
-                }
-                Thread.sleep(2000);
+                Thread.sleep(300);
+//                byte[] buff = new byte[256];
+//                if (MainActivity.inputStream.read(buff) != -1){
+//                    if (!key.equals(buff)){
+//                        //return false;
+//                    }
+//                }
+//                Thread.sleep(300);
+                ClientSocket client = new ClientSocket();
+                client.start();
             } catch (InterruptedException e) {
                 return false;
             } catch (IOException e){
@@ -366,6 +368,7 @@ public class IP_connect extends AppCompatActivity implements LoaderCallbacks<Cur
             }
 
             // TODO: register the new account here.
+
             return true;
         }
 
