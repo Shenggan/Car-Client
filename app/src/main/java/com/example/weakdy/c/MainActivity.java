@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getIpAddress(){
-        WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
         String ipAddressFormatted = String.format("%d.%d.%d.%d", (ipAddress & 0xff), (ipAddress >> 8 & 0xff),
                 (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String get_wifi_info(){
-        WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         WifiInfo wi = wifiManager.getConnectionInfo();
         return wi.getSSID();
     }
