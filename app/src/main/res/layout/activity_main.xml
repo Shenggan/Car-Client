@@ -7,27 +7,37 @@
     tools:context="com.example.weakdy.c.MainActivity">
 
     <TextView
-        android:id="@+id/IP_content"
+        android:id="@+id/IP"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your IP Address:"
+        android:text="Your IP Address"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.06"
-        app:layout_constraintHorizontal_bias="0.1" />
+        app:layout_constraintVertical_bias="0.0"/>
+
     <TextView
-        android:id="@+id/wifi_info"
+        android:id="@+id/IP_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You haven't connect to wifi!"
+        android:text="0.0.0.0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.06"
-        app:layout_constraintHorizontal_bias="0.8" />
+        app:layout_constraintVertical_bias="0.075"/>
+
+    <TextView
+        android:id="@+id/wifi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No WIFI Connection"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15"/>
     <Button
         android:id="@+id/login"
         android:layout_width="wrap_content"

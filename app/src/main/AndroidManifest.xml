@@ -50,7 +50,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.weakdy.c.MainActivity" />
         </activity>
-
+        <activity android:name=".Control"></activity>
     </application>
 
 </manifest>

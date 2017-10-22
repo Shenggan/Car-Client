@@ -190,11 +190,11 @@ public class IP_connect extends AppCompatActivity implements LoaderCallbacks<Cur
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!pattern.matcher(email).matches()) {
+        } /*else if (!pattern.matcher(email).matches()) {
             mEmailView.setError("Invalid IP Address");
             focusView = mEmailView;
             cancel = true;
-        }
+        }*/
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
