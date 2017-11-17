@@ -2,6 +2,7 @@ package com.example.weakdy.c;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Message;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -54,7 +55,7 @@ public class ClientSocket extends Thread {
                     byteArray = new ByteArrayOutputStream();
                 System.out.println("______________________________________________________________________ydf:wt 1");
                 socket = new java.net.Socket();
-                Thread.sleep(1000);
+                Thread.sleep(100);
 
                 String ip = MainActivity.IP_addr;
                 socket.connect(new InetSocketAddress(ip, 8888), 10000); // hard-code server address
@@ -127,7 +128,13 @@ public class ClientSocket extends Thread {
                         Bitmap uuv= BitmapFactory.decodeByteArray(tmp,0,tmp.length);
                         fp=(fp+1)%80;
                         cu1r=uuv;
-                        mDataListener.onDirty(uuv);
+                        //mDataListener.onDirty(uuv);
+                        Message mmsg = new Message();
+                        mmsg.obj = uuv;
+                        Control.mHandler.sendMessage(mmsg);
+
+                        //Control.img_view.setImageBitmap(uuv);
+
                     }
                 }
             }
