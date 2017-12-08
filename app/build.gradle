@@ -33,5 +33,5 @@ dependencies {
     //compile 'com.baidu.aip:3.3.2'
     testCompile 'junit:junit:4.12'
     compile files('src/main/libs/gson-2.2.4.jar')
-    implementation files('libs/aip-java-sdk-3.2.1.jar')
+    compile files('libs/aip-java-sdk-3.2.1.jar')
 }
