@@ -30,9 +30,12 @@ import java.io.BufferedReader;
 import android.os.Handler;
 import android.os.Message;
 
+
+import com.gcssloop.widget.RockerView;
+
 public class Control extends AppCompatActivity {
 
-    private TextView output;
+    public static TextView output;
     public static ImageView img_view;
     public OutputStream mmOutputStream;
     public InputStream mmInputStream;
@@ -43,6 +46,11 @@ public class Control extends AppCompatActivity {
     private BluetoothAdapter mBTAdapter;
     private UUID uuid;
     private BufferedReader pht;
+
+    public static String bluetoothmsg;
+    public static boolean freeze = false;
+    public static boolean once = false;
+    public static String re_json = "None Results";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,20 +74,19 @@ public class Control extends AppCompatActivity {
             public void run() {
                 while(true) {
                     try {
-                        if(sendData("w\n")) {
+                        if(sendData(bluetoothmsg)) {
                                 System.out.println("Bluetooth send succefully!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                        Thread.sleep(1000);
+                                Thread.sleep(1000);
                         continue;
-                    }
-                    mmSocket.connect();
-                    mmOutputStream = mmSocket.getOutputStream();
-                    mmInputStream = mmSocket.getInputStream();
-                    pht=new BufferedReader(new InputStreamReader(mmInputStream));
-                } catch (Exception e) {
+                        }
+                        mmSocket.connect();
+                        mmOutputStream = mmSocket.getOutputStream();
+                        mmInputStream = mmSocket.getInputStream();
+                        pht=new BufferedReader(new InputStreamReader(mmInputStream));
+                    } catch (Exception e) {}
                 }
             }
-        }
-    }).start();
+        }).start();
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -87,8 +94,14 @@ public class Control extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_control);
-        output = (TextView) findViewById(R.id.text_output );
+
+        output = (TextView) findViewById(R.id.text_output);
         final Button loginVoice = (Button) findViewById(R.id.btn_voice);
+        final Button SensorExit = (Button) findViewById(R.id.SensorExit);
+        final TextView output = (TextView) findViewById(R.id.text_output);
+        final RockerView rocker = (RockerView) findViewById(R.id.rocker);
+        final Button loginSensor = (Button) findViewById(R.id.btn_sensor);
+
         loginVoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,25 +120,49 @@ public class Control extends AppCompatActivity {
             System.out.println("ERROR!!!!!!!!!!!!!!!!!!!!!***********************************");
         }
 
-
-        final Button loginSensor = (Button) findViewById(R.id.btn_sensor);
         loginSensor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 System.out.println("123");
                 Intent intent = new Intent(Control.this, SensorActivity.class);
-                startActivityForResult(intent,1);
+                startActivity(intent);
             }
         });
-        final RockerView rocket = (RockerView) findViewById(R.id.rocker);
+
+        if (null != rocker){
+            rocker.setListener(new RockerView.RockerListener() {
+
+                @Override
+                public void callback(int eventType, int currentAngle, float currentDistance) {
+                    switch (eventType) {
+                        case RockerView.EVENT_ACTION:
+                            // 触摸事件回调7
+                            //output.setText(currentAngle);
+                            System.out.println("angle============================================"+currentAngle);
+                            //info_display.setText("angle="+currentAngle+" - distance"+currentDistance);
+                            if(currentAngle>315||0<currentAngle&&currentAngle<=45){Control.bluetoothmsg="d" ;}
+                            else if(45<currentAngle&&currentAngle<135){Control.bluetoothmsg="w" ;}
+                            else if(135<=currentAngle&&currentAngle<225){Control.bluetoothmsg="a" ;}
+                            else if(225<=currentAngle&&currentAngle<=315){Control.bluetoothmsg="s" ;}
+                            else{Control.bluetoothmsg="x" ;}
+                            break;
+                        case RockerView.EVENT_CLOCK:
+                            break;
+                    }
+                }
+            });
+        }
 
         FloatingActionButton fb1 = (FloatingActionButton) findViewById(R.id.fb1);
         fb1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rocket.setVisibility(View.VISIBLE);
+                output.setText("");
+                rocker.setVisibility(View.VISIBLE);
                 loginVoice.setVisibility(View.INVISIBLE);
                 loginSensor.setVisibility(View.INVISIBLE);
+                SensorExit.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -133,9 +170,11 @@ public class Control extends AppCompatActivity {
         fb2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rocket.setVisibility(View.INVISIBLE);
+                output.setText("");
+                rocker.setVisibility(View.INVISIBLE);
                 loginVoice.setVisibility(View.VISIBLE);
                 loginSensor.setVisibility(View.INVISIBLE);
+                SensorExit.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -143,9 +182,11 @@ public class Control extends AppCompatActivity {
         fb3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rocket.setVisibility(View.INVISIBLE);
+                output.setText("");
+                rocker.setVisibility(View.INVISIBLE);
                 loginVoice.setVisibility(View.INVISIBLE);
                 loginSensor.setVisibility(View.VISIBLE);
+                SensorExit.setVisibility(View.VISIBLE);
             }
         });
 
@@ -153,13 +194,26 @@ public class Control extends AppCompatActivity {
         fb4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rocket.setVisibility(View.VISIBLE);
+                if (freeze == false) {
+                    freeze = true;
+                    rocker.setVisibility(View.INVISIBLE);
+                    output.setText("Anylsing...");
+                } else {
+                    output.setText("");
+                    freeze = false;
+                    once = false;
+                    rocker.setVisibility(View.VISIBLE);
+                }
                 loginVoice.setVisibility(View.INVISIBLE);
                 loginSensor.setVisibility(View.INVISIBLE);
+                SensorExit.setVisibility(View.INVISIBLE);
             }
         });
-
-
+        output.setText("");
+        rocker.setVisibility(View.VISIBLE);
+        loginVoice.setVisibility(View.INVISIBLE);
+        loginSensor.setVisibility(View.INVISIBLE);
+        SensorExit.setVisibility(View.INVISIBLE);
         /*
         findViewById(R.id.pink_icon).setOnClickListener(new OnClickListener() {
             @Override
@@ -250,6 +304,24 @@ public class Control extends AppCompatActivity {
         }
 
     };
+
+    static public Handler mHandler2 = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    output.setText(re_json);
+                    System.out.println(re_json);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    };
+
 
 //    @Override
 //    public void onClick(View v) {

@@ -3,17 +3,25 @@ package com.example.weakdy.c;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Message;
+import android.content.Context;
+import android.os.Environment;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.InetSocketAddress;
 import java.util.LinkedList;
+import java.util.HashMap;
+
+import com.baidu.aip.imageclassify.AipImageClassify;
+import org.json.JSONObject;
 
 /**
  * Created by zqm on 17-10-22.
@@ -124,14 +132,47 @@ public class ClientSocket extends Thread {
                             int t=inputStream.read(tmp,cur,le1n-cur);
                             cur=cur+t;
                         }
-                        System.out.println("cxy:reci"+tmp.length+":"+tmp[0]+":"+tmp[500]+":"+tmp[5000]+":"+tmp[tmp.length-5000]);
+                        // System.out.println("cxy:reci"+tmp.length+":"+tmp[0]+":"+tmp[500]+":"+tmp[5000]+":"+tmp[tmp.length-5000]);
                         Bitmap uuv= BitmapFactory.decodeByteArray(tmp,0,tmp.length);
                         fp=(fp+1)%80;
                         cu1r=uuv;
                         //mDataListener.onDirty(uuv);
                         Message mmsg = new Message();
                         mmsg.obj = uuv;
-                        Control.mHandler.sendMessage(mmsg);
+                        if (Control.freeze == false){
+                            Control.mHandler.sendMessage(mmsg);
+                        } else {
+                            if (Control.once == false) {
+                                String img_dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/test.jpg";
+                                try {
+                                    File file = new File(img_dir);
+                                    FileOutputStream out = new FileOutputStream(file);
+                                    uuv.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                                    out.flush();
+                                    out.close();
+                                    String APP_ID = "10440890";
+                                    String API_KEY = "G1niIW5UEVnBvBp6YfwY6PHs";
+                                    String SECRET_KEY = "diDbUw8PHdLPqVIkq1woBMKwDBS4P8bn";
+                                    AipImageClassify client = new AipImageClassify(APP_ID, API_KEY, SECRET_KEY);
+                                    JSONObject res = client.animalDetect(img_dir, new HashMap<String, String>());
+                                    //System.out.println(res.toString(2));
+                                    if (res.getJSONArray("result").length() <= 1) {
+                                        Control.re_json = res.getJSONArray("result").getJSONObject(0).getString("name");
+                                    } else {
+                                        Control.re_json = res.getJSONArray("result").getJSONObject(0).getString("name")
+                                                + '\n' + res.getJSONArray("result").getJSONObject(1).getString("name");
+                                    }
+
+                                    Message finish_msg = new Message();
+                                    finish_msg.obj = "ok";
+                                    Control.mHandler2.sendMessage(finish_msg);
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                Control.once = true;
+                            }
+                        }
 
                         //Control.img_view.setImageBitmap(uuv);
 

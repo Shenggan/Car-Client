@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.gcssloop.widget.RockerView;
 import com.google.gson.Gson;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechConstant;
@@ -45,6 +46,16 @@ public class VoiceActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_control);
+
+        final Button loginVoice = (Button) findViewById(R.id.btn_voice);
+        final Button SensorExit = (Button) findViewById(R.id.SensorExit);
+        final RockerView rocker = (RockerView) findViewById(R.id.rocker);
+        final Button loginSensor = (Button) findViewById(R.id.btn_sensor);
+
+        rocker.setVisibility(View.INVISIBLE);
+        loginVoice.setVisibility(View.INVISIBLE);
+        loginSensor.setVisibility(View.INVISIBLE);
+        SensorExit.setVisibility(View.INVISIBLE);
 
         SpeechUtility.createUtility(this, SpeechConstant.APPID + "=59e5e80a");
         startSpeechDialog();
@@ -107,27 +118,27 @@ public class VoiceActivity extends Activity {
         String stringD = "左转";
         String stringE = "右转";
         if (text.equals(stringA)) {
-
+            Control.bluetoothmsg="w" ;
             //textleft.setText("f");
             //sendMessage("F#");
         }
         if (text.equals(stringB)) {
-
+            Control.bluetoothmsg="s" ;
             //textleft.setText("b");
             //sendMessage("B#");
         }
         if (text.equals(stringC)) {
-
+            Control.bluetoothmsg="x" ;
             //textleft.setText("s");
             //sendMessage("P#");
         }
         if (text.equals(stringD)) {
-
+            Control.bluetoothmsg="a" ;
             //textleft.setText("l");
             //sendMessage("L#");
         }
         if (text.equals(stringE)) {
-
+            Control.bluetoothmsg="d" ;
             //textleft.setText("r");
             //sendMessage("R#");
         }

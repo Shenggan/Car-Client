@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.example.weakdy.c"
         minSdkVersion 23
@@ -30,7 +30,8 @@ dependencies {
     compile 'com.getbase:floatingactionbutton:1.10.1'
     compile 'com.github.GcsSloop:Rocker:v1.1.1'
     compile 'com.android.support:design:26.+'
+    //compile 'com.baidu.aip:3.3.2'
     testCompile 'junit:junit:4.12'
     compile files('src/main/libs/gson-2.2.4.jar')
-
+    implementation files('libs/aip-java-sdk-3.2.1.jar')
 }
