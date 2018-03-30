@@ -1,6 +1,6 @@
 # Car-Client
 
-[![Build Status](https://travis-ci.org/Shenggan/Car-Client.svg?branch=master)](https://travis-ci.org/Shenggan/Car-Client)
+[![Build Status](https://travis-ci.org/Shenggan/Car-Client.svg?branch=master)](https://travis-ci.org/Shenggan/Client)
 
 手持端app，主要负责接受视频，给出小车命令。
 
